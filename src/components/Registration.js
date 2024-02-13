@@ -1,11 +1,12 @@
 import React, { useRef, useState } from "react";
 import { validation } from "../utils/validation ";
 import { useDispatch } from "react-redux";
-import { addGender, addHobbies, addInfo } from "../utils/userSlice";
+import { addFile, addGender, addHobbies, addInfo } from "../utils/userSlice";
 import { Link } from "react-router-dom";
 
 function Registration() {
   const [error, setError] = useState(null);
+  const [show, setShow] = useState(false)
   const [hobbies, setHobbies] = useState([]);
   const [gender, setGender] = useState(null);
   const [file, setFile] = useState(null);
@@ -52,9 +53,12 @@ function Registration() {
 
   let dispatch = useDispatch();
 
+ function handleClick (){
   dispatch(addInfo(info));
   dispatch(addHobbies(hobbies));
-  dispatch(addGender(hobbies));
+  dispatch(addGender(gender));
+  dispatch(addFile(file));
+ }
 
   const handleError = () => {
     const message = setError(
@@ -68,9 +72,22 @@ function Registration() {
     console.log(message);
     if (message) return;
   };
+
+  console.log(info);
   return (
-    <div className="flex flex-col w-80 m-auto mt-32 bg-slate-800 p-8 rounded-md">
-      <form onSubmit={(e) => e.preventDefault()} className="">
+    
+   <>
+    {
+      !error && show && <Link to='/home'><h1 className={`text-white text-right mt-20 mr-32 font-bold`}>Profile</h1></Link>
+    }
+
+   <div className="flex flex-col w-80 m-auto mt-32 bg-slate-800 p-8 rounded-md">
+      <form id="form" onSubmit={(e) =>{ e.preventDefault();
+      handleError();
+      setUserInfo();
+      setShow(true);
+      
+      }} className="">
         <input
           ref={name}
           className="w-full p-2 mb-2 rounded-md"
@@ -181,21 +198,13 @@ function Registration() {
         />
 
         <p className="text-red-500 font-bold mt-2">{error}</p>
-       
-        
-            <button
-              className="p-2 bg-blue-500 text-white font-bold w-full mt-5"
-              onClick={() => {
-                
-                handleError();
-              }}
-            >
-                <Link to='/home' >Submit</Link>
-              
-            </button>
-          
+
+      <button onClick={handleClick()} className="p-2 bg-blue-500 text-white font-bold w-full mt-5">
+          Submit
+        </button>
       </form>
     </div>
+   </> 
   );
 }
 

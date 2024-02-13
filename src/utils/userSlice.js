@@ -25,5 +25,5 @@ const userSlice = createSlice({
     }
 })
 
-export const {addInfo , addHobbies, addGender} = userSlice.actions
+export const {addInfo , addHobbies, addGender, addFile} = userSlice.actions
 export default userSlice.reducer
